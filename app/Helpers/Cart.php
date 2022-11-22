@@ -84,4 +84,11 @@ class Cart
 
         return $total;
     }
+
+    public function getCount(): ?int
+    {
+        $cart = $this->get();
+
+        return count($cart['products']);
+    }
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use App\Facades\Cart as CartFacade;
+use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,7 @@ use App\Facades\Cart as CartFacade;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::middleware([
@@ -69,6 +70,14 @@ Route::middleware([
                 "receipt_email" => $user->email,
                 'description' => 'Compra online',
             ]);
+
+            Order::create(
+                [
+                    'email' => $user?->email,
+                    'total' => $total,
+                    'qty' => count($cart['products']),
+                ]
+            );
 
             CartFacade::clear();
 
